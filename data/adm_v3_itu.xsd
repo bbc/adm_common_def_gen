@@ -1,0 +1,1179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adm="urn:metadata-schema:adm"
+        targetNamespace="urn:metadata-schema:adm" elementFormDefault="qualified">
+
+  <element name="ituADM" type="adm:ituADMType">
+  </element>
+  
+  <complexType name="ituADMType">
+    <annotation>
+      <documentation>Top Level.</documentation>
+    </annotation>
+    <sequence>
+      <element name="audioFormatExtended" type="adm:audioFormatExtendedType"/>
+    </sequence>
+  </complexType>
+  
+	<complexType name="audioFormatExtendedType">
+		<annotation>
+			<documentation>A container with all definitions related to the audioContents and
+				associated components contained in the material.</documentation>
+		</annotation>
+		<sequence>
+			<element ref="adm:audioProgramme" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>One set of content associated with the	material.</documentation>
+				</annotation>
+			</element>
+			<element ref="adm:audioContent" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>One or more audioContents associated with an audioProgramme.
+						audioContent refers to an audioObject which contains the audio and its format description.</documentation>
+				</annotation>
+			</element>
+			<element ref="adm:audioObject" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>A time limited (if required) set of audio tracks with a format defined by audioPackFormat.</documentation>
+				</annotation>
+			</element>
+			<element ref="adm:audioPackFormat" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>A set of audioChannels that belong together.</documentation>
+				</annotation>
+			</element>
+			<element ref="adm:audioChannelFormat" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>A single sequence of audio samples.</documentation>
+				</annotation>
+			</element>
+			<element ref="adm:audioBlockFormat" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>A division of an audioChannel in time.</documentation>
+				</annotation>
+			</element>
+			<element ref="adm:audioStreamFormat" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation> A combination of one or more tracks required to represent a
+						channel, an object, or a group.</documentation>
+				</annotation>
+			</element>
+			<element ref="adm:audioTrackFormat" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>A single set of samples of data in the storage medium.</documentation>
+				</annotation>
+			</element>
+			<element ref="adm:audioTrackUID" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>The UID of a track in the file. </documentation>
+				</annotation>
+			</element>
+		</sequence>
+    <attribute name="audioFormatExtendedID" type="ID">
+			<annotation>
+				<documentation>An unique ID for the extended audio format</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="audioFormatExtendedName" type="string">
+			<annotation>
+				<documentation>A human readable name for the extended audio format</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+
+      
+      
+  <!-- AUDIO PROGRAMME -->
+  
+	<element name="audioProgramme" type="adm:audioProgrammeType">
+		<annotation>
+			<documentation> A set of one or more audioContent that derive from the same material,
+				and the definition of its multiplexed audioContents (e.g.
+				foreground and commentary, background music). </documentation>
+		</annotation>
+	</element>
+	<complexType name="audioProgrammeType">
+		<sequence>
+			<element name="audioContentIDRef" type="IDREF" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>A list of reference to audioContents, each defining one component
+						of an audioProgramme (e.g. background music), its association with an
+						audioPack (e.g. a 2.0 audioPack of audioChannels for stereo reproduction),
+						its association with a audioStream, and its set of loudness parameters.
+						Notice that loudness values of a program are dependent of the associated
+						audioPack mixReproductionFormat.</documentation>
+				</annotation>
+			</element>
+			<element name="loudnessMetadata" type="adm:loudnessMetadataType" minOccurs="0">
+				<annotation>
+					<documentation>A set of loudness parameters proper to the audio content of the
+						whole programme.</documentation>
+				</annotation>
+			</element>
+      <element name="audioProgrammeReferenceScreen" type="adm:audioProgrammeReferenceScreenType" minOccurs="0" maxOccurs="1">
+ 				<annotation>
+					<documentation>Specification of a reference/production/monitoring screen size for the audioProgramme. If the reference screen-size is not given, a default screen-size is implicitly defined.</documentation>
+				</annotation>
+     </element>
+		</sequence>
+		<attribute name="audioProgrammeID" type="ID" use="required">
+			<annotation>
+				<documentation>An unique ID for the programme.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="audioProgrammeName" type="string">
+			<annotation>
+				<documentation>An unique human readable name for the programme.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="audioProgrammeLanguage" type="language">
+			<annotation>
+				<documentation>The dialogue language used in this audioProgramme.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="start" type="adm:timecodeType">
+			<annotation>
+				<documentation> Start time for the programme. </documentation>
+			</annotation>
+		</attribute>
+		<attribute name="end" type="adm:timecodeType">
+			<annotation>
+				<documentation> End time for the programme. </documentation>
+			</annotation>
+		</attribute>
+		<attributeGroup ref="adm:typeGroup">
+			<annotation>
+				<documentation>To optionally define a type of audioProgramme.</documentation>
+			</annotation>
+		</attributeGroup>
+		<attributeGroup ref="adm:formatGroup">
+			<annotation>
+				<documentation>To optionally define a format of audioProgramme.</documentation>
+			</annotation>
+		</attributeGroup>
+      <attribute name="maxDuckingDepth" type="float">
+      <annotation>
+				<documentation>The maximum level (in dB) any audio object in the programme can be reduced by when ducking is invoked.</documentation>
+      </annotation>
+    </attribute></complexType>
+
+  <complexType name="audioProgrammeReferenceScreenType">
+    <sequence>
+      <element name="aspectRatio" type="float" minOccurs="0" maxOccurs="1">
+        <annotation>
+          <documentation>Aspect ratio of display expressed as a float (e.g. use 1.6 for 16:10).</documentation>
+        </annotation>         
+      </element> 
+      <element name="screenCentrePosition" type="adm:screenCentrePositionType" minOccurs="0" maxOccurs="1">
+        <annotation>
+          <documentation>Centre position of the screen in the room/space (default x=0,y=1,z=0, or az=0,el=0,d=1.0).</documentation>
+        </annotation>   
+      </element>
+      <element name="screenWidth" type="adm:screenWidthType" minOccurs="0" maxOccurs="1">
+        <annotation>
+          <documentation>Width of screen based on normalised room dimensions.</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+  
+  <complexType name="screenCentrePositionType">
+    <simpleContent>
+			<extension base="float">
+				<attribute name="azimuth" type="float">
+          <annotation>
+            <documentation>Azimuth angle for the centre of the screen.</documentation>
+          </annotation>
+        </attribute>
+				<attribute name="elevation" type="float">
+          <annotation>
+            <documentation>Elevation angle for the centre of the screen.</documentation>
+          </annotation>
+        </attribute>
+				<attribute name="distance" type="float">
+          <annotation>
+            <documentation>Distance to the centre of the screen.</documentation>
+          </annotation>
+        </attribute>
+				<attribute name="X" type="float">
+          <annotation>
+            <documentation>X-coordinate for the centre of the screen.</documentation>
+          </annotation>
+        </attribute>
+				<attribute name="Y" type="float">
+          <annotation>
+            <documentation>Y-coordinate for the centre of the screen.</documentation>
+          </annotation>
+        </attribute>
+				<attribute name="Z" type="float">
+          <annotation>
+            <documentation>Z-coordinate for the centre of the screen.</documentation>
+          </annotation>
+        </attribute>
+			</extension>
+		</simpleContent>
+  </complexType>
+  
+  <complexType name="screenWidthType">
+    <simpleContent>
+			<extension base="float">
+				<attribute name="azimuth" type="float">
+          <annotation>
+            <documentation>Width of the screen in polar coordinates.</documentation>
+          </annotation>
+        </attribute>
+				<attribute name="X" type="float">
+          <annotation>
+            <documentation>Width of the screen in Cartesian coordinates.</documentation>
+          </annotation>
+        </attribute>
+			</extension>
+		</simpleContent>
+  </complexType>
+
+  <!-- AUDIO CONTENT -->
+  
+  <element name="audioContent" type="adm:audioContentType">
+		<annotation>
+				<documentation>An audioContent element defines one component of a programme (e.g. background
+				music), its association with an audioPackFormat (e.g. a 2.0 audioPackFormat of
+				audioChannelFormats for stereo reproduction) and its set of loudness parameters. </documentation>
+	  </annotation>
+	</element>
+
+	<complexType name="audioContentType">
+		<sequence>
+			<element name="audioObjectIDRef" type="IDREF" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation> A set of references to audio objects. </documentation>
+				</annotation>
+			</element>
+			<element name="loudnessMetadata" type="adm:loudnessMetadataType" minOccurs="0">
+				<annotation>
+					<documentation> A set of loudness parameters connected with the audio content.
+					</documentation>
+				</annotation>
+			</element>
+      <element name="dialogue" type="adm:dialogueType">
+        <annotation>
+					<documentation>A set of values to categorise the presence of dialogue and its type.</documentation>
+				</annotation>
+      </element>
+		</sequence>
+		<attribute name="audioContentID" type="ID">
+			<annotation>
+				<documentation>An unique ID for the audioContent.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="audioContentName" type="string">
+			<annotation>
+				<documentation>An unique human readable name for the audioContent.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="audioContentLanguage" type="language">
+			<annotation>
+				<documentation>The dialogue language used in this audioContent.</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+
+  <complexType name="dialogueType">
+    <simpleContent>
+			<extension base="int">
+				<attribute name="nonDialogueContentKind" type="int">
+          <annotation>
+				    <documentation>Numerical ID for the kind of non-dialogue content: 
+              0 -	undefined
+              1	- music
+              2	- effect
+            </documentation>
+			    </annotation>
+        </attribute>
+				<attribute name="dialogueContentKind" type="int">
+          <annotation>
+				    <documentation>Numerical ID for the kind of dialogue content: 
+              0	- undefined
+              1	- (storyline) dialogue
+              2	- voiceover
+              3	- spoken subtitle
+              4	- audio description/visually impaired
+              5	- commentary
+              6	- emergency
+            </documentation>
+			    </annotation>
+        </attribute>
+				<attribute name="mixedContentKind" type="int">
+          <annotation>
+				    <documentation>Numerical ID for the kind of mixed content: 
+              0	- undefined
+              1	- complete main
+              2	- mixed
+              3	- hearing impaired
+            </documentation>
+			    </annotation>
+        </attribute>
+			</extension>
+		</simpleContent>
+  </complexType>
+
+  <!-- AUDIO OBJECT -->
+  
+  <element name="audioObject" type="adm:audioObjectType">
+		<annotation>
+			<documentation>Establish the relationship between the content using track UIDs and the
+				format via audio packs. These can be nested, so refer to other
+				audioObjects.</documentation>
+		</annotation>
+	</element>
+	<complexType name="audioObjectType">
+		<sequence>
+			<element name="audioPackFormatIDRef" type="IDREF" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation> A set of references to audioPacks. </documentation>
+				</annotation>
+			</element>
+			<element name="audioObjectIDRef" type="IDREF" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation> A set of references to audioObjects. </documentation>
+				</annotation>
+			</element>
+			<element name="audioComplementaryObjectIDRef" type="IDREF" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Reference to another audioObject that should be complementary to this one (i.e. only one of them can be used at a time).</documentation>
+				</annotation>
+      </element>
+      <element name="audioTrackUIDRef" type="IDREF" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation> Reference to an audioTrackUID that is listed in the 'chna' chunk. </documentation>
+				</annotation>
+			</element>
+			<element name="audioObjectInteraction" type="adm:audioObjectInteractionType" minOccurs="0" maxOccurs="unbounded">
+        <annotation>
+					<documentation> Set of parameters for limiting the amount of interaction of an object. </documentation>
+				</annotation>
+      </element>
+		</sequence>
+		<attribute name="audioObjectID" type="ID">
+			<annotation>
+				<documentation> A unique ID for this audioObject, </documentation>
+			</annotation>
+		</attribute>
+		<attribute name="audioObjectName" type="string">
+			<annotation>
+				<documentation> A unique human readable name for this audioObject, </documentation>
+			</annotation>
+		</attribute>
+		<attribute name="start" type="adm:timecodeType">
+			<annotation>
+				<documentation> The start time associated with this audioObject expressed as a
+					timecode. </documentation>
+			</annotation>
+		</attribute>
+		<attribute name="duration" type="adm:timecodeType">
+			<annotation>
+				<documentation> The duration associated with this audioObject expressed as a
+					timecode. </documentation>
+			</annotation>
+		</attribute>
+		<attribute name="dialogue" type="int" default="0">
+			<annotation>
+				<documentation>1 if object is dialogue, 0 if not, 2 if mixed. Default =
+					0.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="importance" type="int">
+			<annotation>
+				<documentation>Importance of an object. Allows a render to discard an object below a
+					certain level of importance. 10 is most, 0 least. Default = 10.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="interact" type="boolean">
+			<annotation>
+				<documentation>Allows interaction by the user. 1 for allowing interaction, 0 if not.
+					Default = 0.</documentation>
+			</annotation>
+		</attribute>
+    <attribute name="disableDucking" type="boolean">
+      <annotation>
+        <documentation>Set to true to prevent the object being ducked.</documentation>
+      </annotation>
+		</attribute>
+	</complexType>
+
+  <complexType name="audioObjectInteractionType">
+    <sequence>
+      <element name="gainInteractionRange" minOccurs="0" maxOccurs="2" type="adm:gainInteractionRangeType">
+        <annotation>
+				  <documentation>Set the range of gain values allowed for interaction.</documentation>
+			  </annotation>
+      </element>
+      <element name="positionInteractionRange" minOccurs="0" maxOccurs="6" type="adm:positionInteractionRangeType">
+        <annotation>
+				  <documentation>Set the range of position values allowed for interaction.</documentation>
+			  </annotation>
+      </element>
+    </sequence>
+    <attribute name="onOffInteract" type="boolean">
+      <annotation>
+				<documentation>Set to true to allow interaction, false to disallow.</documentation>
+		  </annotation>
+    </attribute>
+    <attribute name="gainInteract" type="boolean">
+      <annotation>
+				<documentation>Set to true to allow gain interaction, false to disallow.</documentation>
+		  </annotation>
+    </attribute>
+    <attribute name="positionInteract" type="boolean">
+      <annotation>
+				<documentation>Set to true to allow position interaction, false to disallow.</documentation>
+		  </annotation>
+    </attribute>
+  </complexType>
+  
+  <complexType name="gainInteractionRangeType">
+    <simpleContent>
+			<extension base="float">
+				<attribute name="bound" type="string">
+          <annotation>
+				    <documentation>Set attribute to "min" to provide minimum gain factor of possible user gain interaction (gainMin = gain (or 1.0 if not defined) * gainInteractionRangeMin)
+              Set attribute to "max" to provide maximum gain factor of possible user gain interaction (gainMax = gain (or 1.0 if not defined) * gainInteractionRangeMin)
+            </documentation>
+          </annotation>
+        </attribute>
+			</extension>
+		</simpleContent>  
+  </complexType>
+  
+  <complexType name="positionInteractionRangeType">
+    <simpleContent>
+			<extension base="float">
+				<attribute name="coordinate" type="string">
+          <annotation>
+				    <documentation>Set attribute to either "X", "Y", "Z", "azimuth", "elevation" or "distance" to set which axis requires limiting.
+            </documentation>
+          </annotation>
+        </attribute>
+				<attribute name="bound" type="string">
+          <annotation>
+				    <documentation>Set attribute to either "min" or "max" to set whether the axis needs a minimum or maximum range for positioning limiting. 
+            </documentation>
+          </annotation>
+        </attribute>
+			</extension>
+		</simpleContent>  
+  </complexType>
+
+  <!-- AUDIO PACK -->
+  
+  <element name="audioPackFormat" type="adm:audioPackFormatType">
+		<annotation>
+			<documentation>The audioPackFormat brings together one or more audioChannelFormats that
+				belong together. For example 'stereo' and '5.1' would be audioPackFormats for
+				channel-based formats. It can also contain references to other packs to allow
+				nesting. To help define the type of channels described within the pack, a
+				typeDefintion is used to define them. </documentation>
+			<documentation> The typeDefinition/typeLabel must match those in the referred
+				audioChannelFormats:</documentation>
+			<documentation> DirectSpeakers: For channel-based audio, where each channel feeds a
+				speaker directly. Type 0001. </documentation>
+			<documentation> Matrix: For channel-based audio where channels are matrixed together,
+				such as Mid-Side, Lt/Rt. Type 0002. </documentation>
+			<documentation> Objects: For object-based audio where channels represent audio objects
+				(or parts of objects), so include positional information. Type 0003. </documentation>
+			<documentation> HOA: For scene-based audio where Ambisonics and HOA are used. Type 0004. </documentation>
+			<documentation> Binaural:For binaural audio, where playback is over headphones. Type
+				0005. </documentation>
+		</annotation>
+	</element>
+	<complexType name="audioPackFormatType">
+		<sequence>
+			<element name="audioChannelFormatIDRef" type="IDREF" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation> A set of references to audioChannels. </documentation>
+				</annotation>
+			</element>
+			<element name="audioPackFormatIDRef" type="IDREF" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation> A set of references to audio packs. </documentation>
+				</annotation>
+			</element>
+		</sequence>
+		<attribute name="absoluteDistance" type="float">
+			<annotation>
+				<documentation>The absolute distance in metres.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="audioPackFormatID" type="ID">
+			<annotation>
+				<documentation>A unique ID for an audio pack.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="audioPackFormatName" type="string">
+			<annotation>
+				<documentation>A unique human readable name for an audio pack.</documentation>
+			</annotation>
+		</attribute>
+		<attributeGroup ref="adm:typeGroup">
+			<annotation>
+				<documentation>To provide optional information on the type of the audio pack.</documentation>
+			</annotation>
+		</attributeGroup>
+		<attribute name="importance" type="int">
+			<annotation>
+				<documentation>Importance of an audio pack. Allows a render to discard an audio pack below a
+					certain level of importance. 10 is most, 0 least.</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+
+  <!-- AUDIO CHANNEL -->
+  
+  <element name="audioChannelFormat" type="adm:audioChannelFormatType">
+		<annotation>
+			<documentation>An audio channel represents a single sequence of audio samples.</documentation>
+			<documentation>An audioChannelFormat represents a single sequence of audio samples. It
+				is sub-divided in the time domain into audioBlockFormats, which is must contain at
+				least one of. The typeDefintion of the audioChannelFormat specifies the type of
+				audio it is describing, and also determines which parameters are used within its
+				audioBlockFormat children.</documentation>
+			<documentation>Currently, there are five different typeDefinitions:</documentation>
+			<documentation> DirectSpeakers: For channel-based audio, where each audio channel feeds a
+				speaker directly. Type 0001. </documentation>
+			<documentation> Matrix: For channel-based audio where channels are matrixed together,
+				such as Mid-Side, Lt/Rt. Type 0002. </documentation>
+			<documentation> Objects: For object-based audio where channels represent audio objects
+				(or parts of objects), so include positional information. Type 0003. </documentation>
+			<documentation> HOA: For scene-based audio where Ambisonics and HOA are used. Type 0004. </documentation>
+			<documentation> Binaural:For binaural audio, where playback is over headphones. Type
+				0005. </documentation>
+		</annotation>
+	</element>
+	<complexType name="audioChannelFormatType">
+		<sequence>
+			<element ref="adm:frequency" minOccurs="0" maxOccurs="2">
+				<annotation>
+					<documentation>Sets a high or low cut-off frequency for the audio in
+						Hz.</documentation>
+				</annotation>
+			</element>
+			<element ref="adm:audioBlockFormat" minOccurs="1" maxOccurs="unbounded">
+				<annotation>
+					<documentation>A division of the channel in time. Multiple blocks in the channel
+						provide the dynamic information.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+		<attribute name="audioChannelFormatName" type="string">
+			<annotation>
+				<documentation>A unique human readable name for the audio channel</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="audioChannelFormatID" type="ID">
+			<annotation>
+				<documentation>A unique ID for the audio channel</documentation>
+			</annotation>
+		</attribute>
+		<attributeGroup ref="adm:typeGroup">
+			<annotation>
+				<documentation>The type of audio channel, whether directSpeakers, Ambisonic, HOA,
+					objects, Matrix. </documentation>
+			</annotation>
+		</attributeGroup>
+	</complexType>
+  
+  <element name="frequency">
+		<annotation>
+			<documentation> A frequency expressed in "Hz" defining a value associated to a type e.g.
+				lowPass or highPass as the type attribute. </documentation>
+		</annotation>
+		<complexType>
+			<simpleContent>
+				<extension base="int">
+					<attributeGroup ref="adm:typeGroup"/>
+				</extension>
+			</simpleContent>
+		</complexType>
+	</element>
+  
+	<!-- AUDIO BLOCK -->
+
+	<element name="audioBlockFormat" type="adm:audioBlockFormatType">
+		<annotation>
+			<documentation>An audioBlockFormat represents a single sequence of audio samples with
+				fixed parameters, including position, within a specified time. The sub-elements with
+				audioBlockFormat are dependent upon the typeDefintion or typeLabel of the parent
+				audioChannelFormat element.</documentation>
+			<documentation>Currently, there are five different typeDefinitions:</documentation>
+			<documentation> DirectSpeakers: For channel-based audio, where each channel feeds a
+				speaker directly. Type 0001. </documentation>
+			<documentation> Matrix: For channel-based audio where channels are matrixed together,
+				such as Mid-Side, Lt/Rt. Type 0002. </documentation>
+			<documentation> Objects: For object-based audio where channels represent audio objects
+				(or parts of objects), so include positional information. Type 0003. </documentation>
+			<documentation> HOA: For scene-based audio where Ambisonics and HOA are used. Type 0004. </documentation>
+			<documentation> Binaural:For binaural audio, where playback is over headphones. Type
+				0005. </documentation>
+		</annotation>
+	</element>
+
+	<complexType name="audioBlockFormatType">
+		<sequence minOccurs="0" maxOccurs="unbounded">
+			<element name="speakerLabel" minOccurs="0" maxOccurs="unbounded" type="string">
+        <annotation>
+					<documentation>A label to indicate which loudspeaker should be used (e.g. M+30).</documentation>
+				</annotation>
+			</element>
+			<element name="position" minOccurs="0" maxOccurs="unbounded" type="adm:positionType">
+				<annotation>
+					<documentation>A set of user defined parameters to define a location in space.</documentation>
+				</annotation>
+			</element>
+      <element name="matrix" minOccurs="0" maxOccurs="1" type="adm:matrixType">
+				<annotation>
+					<documentation>A set of coefficients that refer to other channels to define a
+						matrix.</documentation>
+				</annotation>
+			</element>
+      <element name="outputChannelIDRef" type="IDREF" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation>A reference to an output audioChannelFormat for Matrix format</documentation>
+				</annotation>
+			</element>
+      <element name="cartesian" minOccurs="0" maxOccurs="1" type="boolean">
+  		  <annotation>
+					<documentation>Set to true if cartesian coordinates used, false (default) for spherical.</documentation>
+				</annotation>      
+			</element>
+			<element name="gain" minOccurs="0" maxOccurs="1" type="float">
+				<annotation>
+					<documentation>Set a gain value for the audio samples in the
+						block.</documentation>
+				</annotation>
+			</element>
+			<element name="diffuse" minOccurs="0" maxOccurs="1" type="float">
+				<annotation>
+					<documentation>Set to 1 if diffuse, 0 if direct.</documentation>
+				</annotation>
+			</element>
+			<element name="width" minOccurs="0" maxOccurs="1" type="float">
+				<annotation>
+					<documentation>Width of object in degrees along azimuth axis if using polar coordinates, and in the X-axis if using Cartesian coordinates.</documentation>
+				</annotation>
+			</element>
+			<element name="height" minOccurs="0" maxOccurs="1" type="float">
+				<annotation>
+					<documentation>Height of object in degrees along elevation axis if using polar coordinates, and in the Z-axis if using Cartesian coordinates.</documentation>
+				</annotation>
+			</element>
+			<element name="depth" minOccurs="0" maxOccurs="1" type="float">
+				<annotation>
+					<documentation>Depth of object along distance line as a normalised distance if using polar coordinates, and in the Y-axis if using Cartesian coordinates</documentation>
+				</annotation>
+			</element>
+			<element name="channelLock" minOccurs="0" maxOccurs="1" type="adm:channelLockType">
+				<annotation>
+					<documentation>If set to 1 a renderer can lock the object to the nearest channel
+						or speaker, rather than normal rendering. The optional maxDistance attribute defines the radius of a sphere around the object’s position. If one or more speakers exist in the defined sphere or on its surface, the object snaps to the nearest speaker. If maxDistance is undefined, a default value of infinity is assumed, meaning that the object should snap to the nearest of all speakers</documentation>
+				</annotation>
+			</element>
+      <element name="objectDivergence" minOccurs="0" maxOccurs="1" type="adm:objectDivergenceType">
+				<annotation>
+				  <documentation>Sets the divergence of an object where 0.0 means all sound in the direction of the object and 1.0 means all sound from the virtual objects placed at an angle set by the azimuthRange attribute value.</documentation>
+			  </annotation>
+      </element>
+			<element name="jumpPosition" minOccurs="0" maxOccurs="1" type="adm:jumpPositionType">
+				<annotation>
+				  <documentation>If set to 1 the position will be interpolated over a period set by the attribute interpolationLength. If set to 0 then interpolation will take the entire length of the block. An interpolationLength value of zero will mean the object jumps without interpolation.</documentation>
+			  </annotation>
+			</element>
+			<element name="zoneExclusion" minOccurs="0" maxOccurs="1" type="adm:zoneExclusionType">
+				<annotation>
+					<documentation>Allows 3D zones to be exluded from rendering. So any speakers that exist within the excluded zone will not be used.</documentation>
+				</annotation>
+			</element>
+      <element name="screenRef" minOccurs="0" maxOccurs="1" type="boolean">
+				<annotation>
+					<documentation>Set to true if the object is related to the screen, false if not.</documentation>
+				</annotation>
+      </element>
+      <element name="importance" minOccurs="0" maxOccurs="1" type="int">
+        <annotation>
+					<documentation>A value from 0 to 10 (most) to indicate the importance of the object.</documentation>
+				</annotation>
+      </element>
+			<element name="equation" minOccurs="0" maxOccurs="1" type="string">
+				<annotation>
+					<documentation>Equation of the ambisonic component.</documentation>
+				</annotation>
+			</element>
+			<element name="degree" minOccurs="0" maxOccurs="1" type="int">
+				<annotation>
+					<documentation>Degree for the ambisonic component.</documentation>
+				</annotation>
+			</element>
+			<element name="order" minOccurs="0" maxOccurs="1" type="int">
+				<annotation>
+					<documentation>Order for the ambisonic component.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+		<attribute name="audioBlockFormatID" type="ID">
+			<annotation>
+				<documentation> A unique ID for the audio block. </documentation>
+			</annotation>
+		</attribute>
+		<attribute name="rtime" type="adm:timecodeType">
+			<annotation>
+				<documentation> Start time of the block expressed as a timecode. </documentation>
+			</annotation>
+		</attribute>
+		<attribute name="duration" type="adm:timecodeType">
+			<annotation>
+				<documentation> Duration of the block expressed as a timecode. </documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+
+	<!-- audioBlockFormat types -->
+
+	<complexType name="positionType">
+		<simpleContent>
+			<extension base="float">
+				<attribute name="coordinate" type="string">
+          <annotation>
+				    <documentation>The axis used, either azimuth, elevation or distance (for polar); or X, Y or Z (for Cartisian)</documentation>
+			    </annotation>
+        </attribute>
+				<attribute name="bound" type="string">
+          <annotation>
+				    <documentation>Set to "min" or "max" to set the bound of the position.</documentation>
+			    </annotation>
+        </attribute>
+        <attribute name="screenEdgeLock" type="string">
+          <annotation>
+				    <documentation>Set to "left", "right", "top" or "bottom" to indicate which edge of the screen to lock the position to.</documentation>
+			    </annotation>
+        </attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+
+  <complexType name="matrixType">
+		<sequence>
+			<element name="coefficient" type="adm:coefficientType" minOccurs="1" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Sets a multiplication coefficient (value attrib) with the ID of
+						another channel</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="coefficientType">
+		<simpleContent>
+			<extension base="IDREF">
+				<attribute name="gain" type="float">
+					<annotation>
+						<documentation>Coefficient value. Literal fixed float.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="gainVar" type="string">
+					<annotation>
+						<documentation>Coefficient value. Variable letter, so renderer can decide gain.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="phase" type="float">
+					<annotation>
+						<documentation>Phase shift value. Literal fixed float.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="phaseVar" type="string">
+					<annotation>
+						<documentation>Phase shift value. Variable letter, so renderer can decide shift.</documentation>
+					</annotation>
+				</attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+
+  <complexType name="objectDivergenceType">
+		<simpleContent>
+      <extension base="float">
+        <attribute name="azimuthRange" type="float">
+          <annotation>
+						<documentation>Set the azimuth angle from the actual object's position to the two virtual positions each side of it.</documentation>
+					</annotation>
+        </attribute>
+        <attribute name="positionRange" type="float">
+          <annotation>
+						<documentation>Set the distance (for Cartesian coordinates) from the actual object's position to the two virtual positions each side of it.</documentation>
+					</annotation>
+        </attribute>
+      </extension>
+		</simpleContent>
+	</complexType>
+
+  <complexType name="channelLockType">
+		<simpleContent>
+      <extension base="boolean">
+        <attribute name="maxDistance" type="float">
+          <annotation>
+						<documentation>The maximum distance that channel can lock within.</documentation>
+					</annotation>
+        </attribute>
+      </extension>
+		</simpleContent>
+	</complexType>
+  
+	<complexType name="jumpPositionType">
+		<simpleContent>
+      <extension base="boolean">
+        <attribute name="interpolationLength" use="optional" type="float">
+          <annotation>
+						<documentation>The interpolation length in seconds.</documentation>
+					</annotation>
+        </attribute>
+      </extension>
+		</simpleContent>
+	</complexType>
+
+  <complexType name="zoneExclusionType">
+    <sequence>
+       <element name="zone" minOccurs="1" maxOccurs="unbounded" type="adm:zoneType">
+        <annotation>
+          <documentation>Specifies the corner points of a cuboid in the 3D space that will be excluded from rendering. Multiple zone elements can be used to specify more complex exclusion shapes.
+          </documentation>
+        </annotation>
+      </element>   </sequence>
+	</complexType>
+  
+  <complexType name="zoneType">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="minX" type="float"/>
+				<attribute name="maxX" type="float"/>
+				<attribute name="minY" type="float"/>
+				<attribute name="maxY" type="float"/>
+				<attribute name="minZ" type="float"/>
+				<attribute name="maxZ" type="float"/>
+				<attribute name="minElevation" type="float"/>
+				<attribute name="maxElevation" type="float"/>
+				<attribute name="minAzimuth" type="float"/>
+				<attribute name="maxAzimuth" type="float"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+  
+  <!-- AUDIO STREAM -->
+  
+	<element name="audioStreamFormat" type="adm:audioStreamFormatType">
+		<annotation>
+			<documentation xml:lang="en">A combination of tracks (or one track) required to
+				represent a channel or a pack. The audioStreamFormat establishes a
+				relation between audioTrackFormats stored in the asset and audioChannelFormats
+				produced by these audioTrackFormats. Its main use is to deal with non-PCM encoded
+				tracks, where one or several audioTrackFormats produce several audioChannelFormats.
+				The audioStreamFormat allows knowing which audioChannelFormats are available on an
+				asset and how to effectively access to them. An audio stream can also be used to
+				link together several PCM audioTrackFormats. </documentation>
+		</annotation>
+	</element>
+	<complexType name="audioStreamFormatType">
+		<sequence>
+			<element name="audioChannelFormatIDRef" minOccurs="0" maxOccurs="unbounded" type="IDREF">
+				<annotation>
+					<documentation> A set of references to audio channels </documentation>
+				</annotation>
+			</element>
+			<element name="audioPackFormatIDRef" type="IDREF" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation> A set of references to audio packs </documentation>
+				</annotation>
+			</element>
+			<element name="audioTrackFormatIDRef" type="IDREF" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation> A set of references to audio tracks </documentation>
+				</annotation>
+			</element>
+		</sequence>
+		<attribute name="audioStreamFormatID" type="ID" use="required">
+			<annotation>
+				<documentation> A unique ID for the audio stream. </documentation>
+			</annotation>
+		</attribute>
+		<attribute name="audioStreamFormatName" type="string">
+			<annotation>
+				<documentation> A unique human readable name for the audio stream. </documentation>
+			</annotation>
+		</attribute>
+		<attributeGroup ref="adm:formatGroup">
+			<annotation>
+				<documentation> A format definition of the audio stream. </documentation>
+			</annotation>
+		</attributeGroup>
+	</complexType>
+
+  <!-- AUDIO TRACK -->
+  
+  <element name="audioTrackFormat" type="adm:audioTrackFormatType">
+		<annotation>
+			<documentation xml:lang="en">An audioTrack object defines a component of an audioStream.
+				A single set of samples or data in the storage medium.</documentation>
+			<documentation>An audioTrack is the basic audio data container of a medium. Attribute is
+				an unambiguous reference to this container in a given medium</documentation>
+			<documentation>Represents a physical container or carrier to hold an audio stream.</documentation>
+		</annotation>
+	</element>
+	<complexType name="audioTrackFormatType">
+		<sequence>
+			<element name="audioStreamFormatIDRef" type="IDREF" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation> A set of references to an audio stream format. </documentation>
+				</annotation>
+			</element>
+		</sequence>
+		<attribute name="audioTrackFormatID" type="ID">
+			<annotation>
+				<documentation>A unique ID for the audio track</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="audioTrackFormatName" type="string">
+			<annotation>
+				<documentation>A unique name for the audio track </documentation>
+			</annotation>
+		</attribute>
+		<attributeGroup ref="adm:formatGroup"/>
+	</complexType>
+  
+  <!-- AUDIO TRACK UID -->
+  
+	<element name="audioTrackUID" type="adm:audioTrackUIDType"/>
+
+	<complexType name="audioTrackUIDType">
+		<sequence>
+			<element name="audioMXFLookUp" type="adm:audioMXFLookUpType" minOccurs="0"
+				maxOccurs="1">
+				<annotation>
+					<documentation>Reference to lookup an MXF essence ID. </documentation>
+				</annotation>
+			</element>
+			<element name="audioTrackFormatIDRef" type="IDREF" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation>
+						Reference to an audioTrackFormat. 
+					</documentation>
+				</annotation>
+			</element>
+			<element name="audioPackFormatIDRef" type="IDREF" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation>
+						Reference to an audioPackFormat. 
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+		<attribute name="UID" type="ID">
+			<annotation>
+				<documentation> UID for the track. </documentation>
+			</annotation>
+		</attribute>
+		<attribute name="sampleRate" type="int">
+			<annotation>
+				<documentation> The sample rate for the audio track. </documentation>
+			</annotation>
+		</attribute>
+		<attribute name="bitDepth" type="int">
+			<annotation>
+				<documentation> The bit depth for sample for the audio track. </documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+
+	<complexType name="audioMXFLookUpType">
+		<annotation>
+			<documentation>A set of references to lookup MXF essence IDs.</documentation>
+		</annotation>
+		<sequence>
+			<element name="packageUIDRef" type="adm:PackageIDType" minOccurs="1" maxOccurs="1">
+				<annotation>
+					<documentation>
+						Reference to a package. 
+					</documentation>
+				</annotation>
+			</element>
+			<element name="trackIDRef" type="NCName" minOccurs="1" maxOccurs="1">
+				<annotation>
+					<documentation>
+						Reference to a track. 
+					</documentation>
+				</annotation>
+			</element>
+			<element name="channelIDRef" type="NCName" minOccurs="1" maxOccurs="1">
+				<annotation>
+					<documentation>
+						Reference to a channel. 
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<simpleType name="PackageIDType">
+		<annotation>
+			<documentation>
+				The pattern for providing package IDs. 
+			</documentation>
+		</annotation>
+		<restriction base="string">
+			<pattern value="urn:smpte:umid:([0-9a-fA-F]{8}\.){7}[0-9a-fA-F]{8}"/>
+		</restriction>
+	</simpleType>
+  
+  <complexType name="loudnessMetadataType">
+		<annotation>
+			<documentation> A set of loudness parameters </documentation>
+		</annotation>
+		<sequence>
+			<element name="integratedLoudness" type="float" minOccurs="0">
+        <annotation>
+          <documentation>
+            Integrated loudness value.
+          </documentation>
+        </annotation>
+      </element>
+			<element name="loudnessRange" type="float" minOccurs="0">
+        <annotation>
+          <documentation>
+            Loudness range.
+          </documentation>
+        </annotation>
+      </element>
+			<element name="maxTruePeak" type="float" minOccurs="0">
+        <annotation>
+          <documentation>
+            Maximum true peak.
+          </documentation>
+        </annotation>
+      </element>
+			<element name="maxMomentary" type="float" minOccurs="0">
+        <annotation>
+          <documentation>
+            Maximum momentary loudness.
+          </documentation>
+        </annotation>
+      </element>
+			<element name="maxShortTerm" type="float" minOccurs="0">
+        <annotation>
+          <documentation>
+            Maximum short term loudness.
+          </documentation>
+        </annotation>
+      </element>
+      <element name="dialogLoudness" type="float" minOccurs="0">
+        <annotation>
+          <documentation>
+            Dialogue loudness.
+          </documentation>
+        </annotation>
+      </element>
+		</sequence>
+		<attribute name="loudnessMethod" type="string">
+      <annotation>
+        <documentation>
+          Method or algorithm used to calculate the loudness.
+        </documentation>
+      </annotation>
+    </attribute>
+		<attribute name="loudnessRecType" type="string">
+      <annotation>
+        <documentation>
+          Regional recommendend practice for correcting loudness levels.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute name="loudnessCorrectionType" type="string">
+      <annotation>
+        <documentation>
+          Correction type for the audio, e.g. file-based or real-time.
+        </documentation>
+      </annotation>
+    </attribute>
+	</complexType>
+  
+  <!-- GENERAL TYPES -->
+  
+  <simpleType name="timecodeType">
+		<annotation>
+			<documentation>The pattern to express the time using timecode compliant with SMPTE ST12-1:2008</documentation>
+		</annotation>
+		<restriction base="string">
+			<pattern
+				value="(([0-1][0-9])|([2][0-3])):[0-5][0-9]:[0-5][0-9](([.,])|([:;]))[0-9]{2,5}"/>
+		</restriction>
+	</simpleType>
+
+  <attributeGroup name="typeGroup">
+		<attribute name="typeLabel" type="string">
+			<annotation>
+				<documentation>
+					Free text to define the type of the associated element. 
+				</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="typeDefinition" type="string">
+			<annotation>
+				<documentation>
+					Free text to provide a definition for the type. 
+				</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="typeLink" type="anyURI">
+			<annotation>
+				<documentation>
+					A URI to link e.g. to a type in a classification scheme. 
+				</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="typeLanguage" type="language">
+			<annotation>
+				<documentation>
+					To define the language in which the type information is provided. 
+				</documentation>
+			</annotation>
+		</attribute>
+	</attributeGroup>
+  
+  <attributeGroup name="formatGroup">
+		<attribute name="formatLabel" type="string">
+			<annotation>
+				<documentation>
+					Free text to define the format of the associated element. 
+				</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="formatDefinition" type="string">
+			<annotation>
+				<documentation>
+					Free text to provide a definition for the format. 
+				</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="formatLink" type="anyURI">
+			<annotation>
+				<documentation>
+					A URI to link e.g. to a format in a classification scheme. 
+				</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="formatLanguage" type="language">
+			<annotation>
+				<documentation>
+					To define the language in which the type information is provided. 
+				</documentation>
+			</annotation>
+		</attribute>
+	</attributeGroup>
+  
+</schema>
+
