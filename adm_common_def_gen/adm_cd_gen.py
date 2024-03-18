@@ -107,11 +107,12 @@ def ReadXLSHOA(fname):
     pa_names = []
     i = 0
     for col in range(i_pos + 1, sheet.max_column + 1):
-        pa_names.append({'ind': i, 
-                         'name': sheet.cell(row=FIRST_INFO_ROW, column=col).value, 
-                         'id': sheet.cell(row=1, column=col).value, 
-                         'child': sheet.cell(row=2, column=col).value})
-        i += 1
+        if sheet.cell(row=FIRST_INFO_ROW, column=col).value is not None:
+            pa_names.append({'ind': i, 
+                            'name': sheet.cell(row=FIRST_INFO_ROW, column=col).value, 
+                            'id': sheet.cell(row=1, column=col).value, 
+                            'child': sheet.cell(row=2, column=col).value})
+            i += 1
 
     i = 0
     pa_list = []
